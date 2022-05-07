@@ -9,44 +9,38 @@ public class Player1Physics : MonoBehaviour
     // Define object
     Rigidbody Player;
     // Declare variables
+    Vector2 Velocity = Vector2.zero;
     float xVelocity = 0;
     float horizontalspeed = 1;
-    float verticalspeed = 20;
-    bool touchingGround = false;
+    //bool touchingGround = false;
 
     void Start()
     {
         // Initialize Player
         Player = GetComponent<Rigidbody>();
-        Player.useGravity = true;
-        Player.velocity = new Vector3(0, 0, 0);
+        Velocity = new Vector2(0,0);
+        Player.velocity = Velocity;
     }
 
     void Update()
     {   
-        // Define Input
-        var Input = Keyboard.current;
-
         // Check position of Player
         if (transform.position.x < -8.85)
         {
-            Player.position = new Vector3(-8.85f, transform.position.y, transform.position.z);
-            xVelocity = 0;
+            Player.position = new Vector2(-8.85f, transform.position.y);
+            Velocity.x = 0;
         }
         if (transform.position.x > 8.85)
         {
-            Player.position = new Vector3(8.85f, transform.position.y, transform.position.z);
-            xVelocity = 0;
+            Player.position = new Vector2(8.85f, transform.position.y);
+            Velocity.x = 0;
         }
-        if (transform.position.y > 5)
+        if (transform.position.y < -20)
         {
-            Player.position = new Vector3(transform.position.x, 5, transform.position.z);
+            Player.position = new Vector2(transform.position.x, 0);
+            Player.velocity = new Vector2(0, 0);
         }
-        if (transform.position.y < -50)
-        {
-            Player.position = new Vector3(transform.position.x, -4, transform.position.z);
-            Player.velocity = new Vector3(0, 0, 0);
-        }
+        /*
 
         // Move x position of Player
         if (Input.dKey.isPressed)
@@ -65,9 +59,12 @@ public class Player1Physics : MonoBehaviour
         {
             xVelocity = -10;
         }
+*/
+
         xVelocity *= 0.99f;
         transform.Translate(xVelocity*Time.deltaTime*horizontalspeed, 0, 0);
 
+/*
         // Walljump task
         if (touchingGround)
         {
@@ -90,7 +87,7 @@ public class Player1Physics : MonoBehaviour
                                 if (Input.wKey.isPressed)
                                 {
                                     xVelocity *= -1;
-                                    Player.AddForce(Vector3.up*10*verticalspeed);
+                                    Player.AddForce(Vector2.up*10*verticalspeed);
                                 }
                             }
                         }
@@ -98,50 +95,56 @@ public class Player1Physics : MonoBehaviour
                 }
             }
         }
-
+        */
+/*
         // Jump task
         transform.Translate(0, -0.2f, 0);
         if (touchingGround && Input.wKey.isPressed)
         {
-            Player.AddForce(Vector3.up*15*verticalspeed);
+            Player.AddForce(Vector2.up*15*verticalspeed);
         }
         transform.Translate(0, 0.2f, 0);
+            */
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    void UpdatePos(InputAction.CallbackContext context)
+    {
+        InputAction.ReadValue<>();
+    }
+/*
+    void onCollisionEnter(Collision other)
     {
         if (other.tag == "Map")
         {
             // Touching the map
             touchingGround = true;
-            Player.useGravity = false;
-            Player.velocity = new Vector3(Player.velocity.x, -Player.velocity.y, Player.velocity.z);
+            Player.velocity = new Vector2(Player.velocity.x, -Player.velocity.y, Player.velocity.z);
             while (touchingGround) {
                 System.Threading.Thread.Sleep(10);
             }
-            Player.velocity = new Vector3(Player.velocity.x, 0, Player.velocity.z);
+            Player.velocity = new Vector2(Player.velocity.x, 0, Player.velocity.z);
         }
         if (other.tag == "Player2Bullet")
         {
             // Touching enemy projectile
         }
     }
-    private void OnTriggerStay(Collider other)
+    void OnCollisionStay(Collision other)
     {
         if (other.tag == "Map")
         {
             // Still touching the map
             touchingGround = true;
-            Player.useGravity = false;
         }
     }
-    private void OnTriggerExit(Collider other)
+    void OnCollisionExit(Collision other)
     {
         if (other.tag == "Map")
         {
             // Leaving the map
             touchingGround = false;
-            Player.useGravity = true;
         }
     }
+    */
 }
